@@ -429,9 +429,18 @@ contract ERC721 is  IERC721 {
         uint256 tokenId
     ) internal virtual {}
 
-
-        function supportsInterface(bytes4 _interfaceId) external override view returns (bool) {
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        return ds.supportedInterfaces[_interfaceId];
-    }
+        /**
+     * @dev this function is already defined in diamondLoupeFacet
+     * this covers for all facets since it will eventually end up in the same storage of selectors
+     * and diamond cut will throw error if we define it here again
+     * because we can't add same function selector twice
+     * 
+     * but if we don't implement this function here, compiler will prompt us to declare this contract abstract
+     * 
+     * this is solve by removing the inheritance of EIP-165 from the IERC721 interface     
+     */
+    // function supportsInterface(bytes4 _interfaceId) external override view returns (bool) {
+    //     LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+    //     return ds.supportedInterfaces[_interfaceId];
+    // }
 }
