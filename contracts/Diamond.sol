@@ -11,12 +11,13 @@ pragma solidity ^0.8.0;
 import {LibDiamond} from "./libraries/LibDiamond.sol";
 import {IDiamondCut} from "./interfaces/IDiamondCut.sol";
 import {AppStorage} from "./libraries/AppStorage.sol";
+import {ERC721MintFacet} from "./facets/ERC721MintFacet.sol";
 
 contract Diamond {
 
     AppStorage internal s;
     
-    constructor(address _contractOwner, address _diamondCutFacet, string memory name, string memory symbol) payable {
+    constructor(address _contractOwner, address _diamondCutFacet, address _erc721, string memory name, string memory symbol) payable {
         LibDiamond.setContractOwner(_contractOwner);
 
         // Add the diamondCut external function from the diamondCutFacet
@@ -29,8 +30,14 @@ contract Diamond {
             functionSelectors: functionSelectors
         });
         LibDiamond.diamondCut(cut, address(0), "");
+
 		s._name = name;
 		s._symbol = symbol;
+        s.MAX_SUPPLY = 10000;
+
+        ERC721MintFacet erc721 = ERC721MintFacet(_erc721);
+        erc721.safeMint(address(_contractOwner), 'QmNjVnsmUiGK7gYa6YVrYS7745ciZEmxk7tSw7StmLPxVq');
+        
     }
 
     // Find facet for function that is called and execute the

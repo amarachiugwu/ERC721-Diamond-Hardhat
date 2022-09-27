@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+import {Counters} from "./Counter.sol";
+
 struct AppStorage {
 
 	 // Token name
@@ -40,6 +42,8 @@ struct AppStorage {
 
     // Array with all token ids, used for enumeration
     uint256[] _allTokens;  
-      
 
+    Counters.Counter _myCounter;
+      
+    uint256 MAX_SUPPLY;
 }

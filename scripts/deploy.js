@@ -13,9 +13,21 @@ async function deployDiamond () {
   await diamondCutFacet.deployed()
   console.log('DiamondCutFacet deployed:', diamondCutFacet.address)
 
+  // deploy ERC721
+  const ERC721 = await ethers.getContractFactory('ERC721')
+  const eRC721 = await ERC721.deploy()
+  await eRC721.deployed()
+  console.log('ERC721 deployed:', eRC721.address)
+
+  // deploy ERC721MintFacet
+  const ERC721MintFacet = await ethers.getContractFactory('ERC721MintFacet')
+  const eRC721MintFacet = await ERC721MintFacet.deploy()
+  await eRC721MintFacet.deployed()
+  console.log('ERC721MintFacet deployed:', eRC721MintFacet.address)
+
   // deploy Diamond
   const Diamond = await ethers.getContractFactory('Diamond')
-  const diamond = await Diamond.deploy(contractOwner.address, diamondCutFacet.address, "Amarachi", "AMY")
+  const diamond = await Diamond.deploy(contractOwner.address, diamondCutFacet.address, eRC721MintFacet.address, "amarachi", "AMY")
   await diamond.deployed()
   console.log('Diamond deployed:', diamond.address)
 
@@ -33,7 +45,8 @@ async function deployDiamond () {
   const FacetNames = [
     'DiamondLoupeFacet',
     'OwnershipFacet',
-    'ERC721'
+    'ERC721',
+    // 'ERC721MintFacet'
   ]
   const cut = []
   for (const FacetName of FacetNames) {
